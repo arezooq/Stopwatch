@@ -1,7 +1,7 @@
 var Stopwatch = /** @class */ (function () {
     function Stopwatch(id, delay) {
         if (delay === void 0) { delay = 100; }
-        this.state = "paused";
+        this.status = "stopped";
         this.delay = delay;
         this.display = document.body;
         this.value = 0;
@@ -16,24 +16,24 @@ var Stopwatch = /** @class */ (function () {
         //   if (seconds < 10) {seconds = "0"+seconds;}
         return "<div class=\"stopwatch\">\n      <div id=\"stopwatch\">00:00:00.0</div>\n      <button onclick=\"stopwatch.start()\">Start</button> \n      <button onClick=\"stopwatch.stop()\">Stop</button>\n      <button onClick=\"stopwatch.reset()\">Reset</button>\n      </div> \n      ".concat(hours, "+':'+").concat(minutes, "+':'+").concat(seconds, "+'.'+").concat(ds);
     };
-    Stopwatch.prototype.update = function () {
-        if (this.state == "running") {
+    Stopwatch.prototype.render = function () {
+        if (this.status == "started") {
             this.value += this.delay;
         }
         this.display.innerHTML = this.formatTime(this.value);
     };
     Stopwatch.prototype.start = function () {
-        if (this.state == "paused") {
-            this.state = "running";
+        if (this.status == "stopped") {
+            this.status = "started";
             if (!this.interval) {
                 var t = this;
-                this.interval = setInterval(function () { t.update(); }, this.delay);
+                this.interval = setInterval(function () { t.render(); }, this.delay);
             }
         }
     };
     Stopwatch.prototype.stop = function () {
-        if (this.state == "running") {
-            this.state = "paused";
+        if (this.status == "stopped") {
+            this.status = "started";
             if (this.interval) {
                 clearInterval(this.interval);
                 this.interval = null;
@@ -43,8 +43,7 @@ var Stopwatch = /** @class */ (function () {
     Stopwatch.prototype.reset = function () {
         this.stop();
         this.value = 0;
-        this.update();
+        this.render();
     };
     return Stopwatch;
 }());
-var stopwatch = new Stopwatch("stopwatch");

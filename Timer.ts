@@ -1,13 +1,12 @@
 
 class Stopwatch {
-    // [x: string]: any;
     display : HTMLElement ;
     delay: number;
-    state: string;
+    status: string;
     value: number;
     interval: any;
-    constructor(id: string, delay=100) { //Delay in ms
-      this.state = "paused";
+    constructor(id: string, delay=100) {
+      this.status = "stopped";
       this.delay = delay;
       this.display = document.body;
       this.value = 0;
@@ -31,26 +30,26 @@ class Stopwatch {
       ${hours}+':'+${minutes}+':'+${seconds}+'.'+${ds}`;
     }
     
-      update() {
-      if (this.state=="running") {
+      render() {
+      if (this.status=="started") {
         this.value += this.delay;
       }
      this.display.innerHTML=this.formatTime(this.value);
     }
     
     start() {
-      if (this.state=="paused") {
-        this.state="running";
+      if (this.status=="stopped") {
+        this.status="started";
         if (!this.interval) {
           var t=this;
-          this.interval = setInterval(function(){t.update();}, this.delay);
+          this.interval = setInterval(function(){t.render();}, this.delay);
         }
       }
     }
     
     stop() {
-         if (this.state=="running") {
-        this.state="paused";
+         if (this.status=="stopped") {
+        this.status="started";
       if (this.interval) {
         clearInterval(this.interval);
         this.interval = null;
@@ -61,7 +60,7 @@ class Stopwatch {
     reset() {
       this.stop();
       this.value=0;
-      this.update();
+      this.render();
     }
   }
   
