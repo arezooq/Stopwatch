@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-     
-     @import url('https://fonts.googleapis.com/css2?family=Iceland&display=swap');
 
 BODY {
-  background: #AAAAAA;
+  background: #f3f0f0;
 }
 
 #stopwatch {
@@ -26,8 +24,7 @@ BODY {
   font-family: 'Iceland', cursive;
   background: #EEEEEE;
   color: blanchedalmond;
-  /* text-shadow:  0 0 3px #33FF33; */
-  background-image: radial-gradient(circle at center center, rgb(34,34,34),rgb(0,0,0));
+  background-color: darkcyan;
 }
 
 .stopwatch {
@@ -42,9 +39,15 @@ button {
     </style>
 </head>
 <body>
-
+    <div class="stopwatch">
+        <button onclick="stopwatch.Add();">Add</button> 
+        <div id="stopwatch">00:00:00.0</div>
+        <button onclick="stopwatch.start();">Start</button> 
+        <button onClick="stopwatch.stop();">Stop</button>
+        <button onClick="stopwatch.reset();">Reset</button>
+     </div>
     <script src="Timer.js">
-          const stopwatch = new Stopwatch("stopwatch");
+          
     </script>
 
 </body>

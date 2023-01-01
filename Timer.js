@@ -3,7 +3,7 @@ var Stopwatch = /** @class */ (function () {
         if (delay === void 0) { delay = 100; }
         this.status = "stopped";
         this.delay = delay;
-        this.display = document.body;
+        this.display = document.getElementById(id);
         this.value = 0;
     }
     Stopwatch.prototype.formatTime = function (ms) {
@@ -11,10 +11,10 @@ var Stopwatch = /** @class */ (function () {
         var minutes = Math.floor((ms - (hours * 3600000)) / 60000);
         var seconds = Math.floor((ms - (hours * 3600000) - (minutes * 60000)) / 1000);
         var ds = Math.floor((ms - (hours * 3600000) - (minutes * 60000) - (seconds * 1000)) / 100);
-        //   if (hours   < 10) {hours   = "0"+hours;}
-        //   if (minutes < 10) {minutes = "0"+minutes;}
-        //   if (seconds < 10) {seconds = "0"+seconds;}
-        return "<div class=\"stopwatch\">\n      <div id=\"stopwatch\">00:00:00.0</div>\n      <button onclick=\"stopwatch.start()\">Start</button> \n      <button onClick=\"stopwatch.stop()\">Stop</button>\n      <button onClick=\"stopwatch.reset()\">Reset</button>\n      </div> \n      ".concat(hours, "+':'+").concat(minutes, "+':'+").concat(seconds, "+'.'+").concat(ds);
+        // if (hours   < 10) {hours   = "0"+hours;}
+        // if (minutes < 10) {minutes = "0"+minutes;}
+        // if (seconds < 10) {seconds = "0"+seconds;}
+        return hours + ':' + minutes + ':' + seconds + '.' + ds;
     };
     Stopwatch.prototype.render = function () {
         if (this.status == "started") {
@@ -45,5 +45,9 @@ var Stopwatch = /** @class */ (function () {
         this.value = 0;
         this.render();
     };
+    Stopwatch.prototype.Add = function () {
+        this.render();
+    };
     return Stopwatch;
 }());
+var stopwatch = new Stopwatch("stopwatch");
