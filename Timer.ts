@@ -39,8 +39,8 @@ class Stopwatch {
     }
 
     private stop() {
-        if (this.status == "stopped") {
-            this.status = "started";
+        if (this.status == "started") {
+            this.status = "stopped";
             if (this.interval) {
                 clearInterval(this.interval);
                 this.interval = null;

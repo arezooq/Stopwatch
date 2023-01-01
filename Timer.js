@@ -11,9 +11,6 @@ var Stopwatch = /** @class */ (function () {
         var minutes = Math.floor((ms - (hours * 3600000)) / 60000);
         var seconds = Math.floor((ms - (hours * 3600000) - (minutes * 60000)) / 1000);
         var ds = Math.floor((ms - (hours * 3600000) - (minutes * 60000) - (seconds * 1000)) / 100);
-        // if (hours   < 10) {hours   = "0"+hours;}
-        // if (minutes < 10) {minutes = "0"+minutes;}
-        // if (seconds < 10) {seconds = "0"+seconds;}
         return hours + ':' + minutes + ':' + seconds + '.' + ds;
     };
     Stopwatch.prototype.render = function () {
@@ -32,8 +29,8 @@ var Stopwatch = /** @class */ (function () {
         }
     };
     Stopwatch.prototype.stop = function () {
-        if (this.status == "stopped") {
-            this.status = "started";
+        if (this.status == "started") {
+            this.status = "stopped";
             if (this.interval) {
                 clearInterval(this.interval);
                 this.interval = null;
