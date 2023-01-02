@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stop Timer</title>
     <style>
 
 BODY {
@@ -15,7 +15,7 @@ BODY {
   margin:auto;
   box-sizing: border-box;
   border:1px solid black;
-  width:152px;
+  width: 400px;
   height: 50px;
   border-radius:5px;
   padding:10px 10px;
@@ -39,9 +39,10 @@ button {
     </style>
 </head>
 <body>
-    <div class="stopwatch">
-        <button onclick="stopwatch.Add();">Add</button> 
-        <div id="stopwatch">00:00:00.0</div>
+
+  <div class="stopwatch">
+    <button onclick="stopwatch.add();">Add</button> 
+    <div id="stopwatch">00:00:00.0</div>
         <button onclick="stopwatch.start();">Start</button> 
         <button onClick="stopwatch.stop();">Stop</button>
         <button onClick="stopwatch.reset();">Reset</button>
