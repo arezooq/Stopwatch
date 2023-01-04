@@ -1,0 +1,20 @@
+{
+  "name": "timer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Timer.js",
+  "scripts": {
+    "start" : "tsc Timer.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arezooq/Stopwatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arezooq/Stopwatch/issues"
+  },
+  "homepage": "https://github.com/arezooq/Stopwatch#readme"
+}

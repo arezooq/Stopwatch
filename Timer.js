@@ -13,11 +13,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var Status;
+(function (Status) {
+    Status[Status["Started"] = 0] = "Started";
+    Status[Status["Stopped"] = 1] = "Stopped";
+})(Status || (Status = {}));
 var Stopwatch = /** @class */ (function () {
-    function Stopwatch(id, delay) {
-        if (delay === void 0) { delay = 10; }
-        this.status = "stopped";
-        this.delay = delay;
+    function Stopwatch(id) {
+        this.render();
+        this.status = Status.Stopped;
+        this.delay = 100;
         this.display = document.getElementById(id);
         this.value = 0;
     }
@@ -38,14 +43,15 @@ var Stopwatch = /** @class */ (function () {
         return hours + ':' + minutes + ':' + seconds + '.' + ds;
     };
     Stopwatch.prototype.update = function () {
-        if (this.status == "started") {
+        if (this.status == Status.Started) {
             this.value += this.delay;
         }
-        this.display.innerHTML = this.formatTime(this.value);
+        var d = document.getElementById('stopwatch');
+        d.innerHTML = this.formatTime(this.value);
     };
     Stopwatch.prototype.start = function () {
-        if (this.status == "stopped") {
-            this.status = "started";
+        if (this.status == Status.Stopped) {
+            this.status = Status.Started;
             if (!this.interval) {
                 var t = this;
                 this.interval = setInterval(function () { t.update(); }, this.delay);
@@ -53,8 +59,8 @@ var Stopwatch = /** @class */ (function () {
         }
     };
     Stopwatch.prototype.stop = function () {
-        if (this.status == "started") {
-            this.status = "stopped";
+        if (this.status == Status.Started) {
+            this.status = Status.Stopped;
             if (this.interval) {
                 clearInterval(this.interval);
                 this.interval = null;
@@ -66,37 +72,21 @@ var Stopwatch = /** @class */ (function () {
         this.value = 0;
         this.update();
     };
-    Stopwatch.prototype.add = function () {
-        return this.update();
-    };
     Stopwatch.prototype.render = function () {
-        var divmain = document.createElement("div");
-        divmain.setAttribute("class", "stopwatch");
-        var addbtn = document.createElement("button");
-        addbtn.setAttribute("value", "Add");
-        var divdisplay = document.createElement("div");
-        divdisplay.setAttribute("id", "stopwatch");
-        var startbtn = document.createElement("button");
-        startbtn.setAttribute("value", "Start");
-        var stopbtn = document.createElement("button");
-        stopbtn.setAttribute("value", "Stop");
-        var resetbtn = document.createElement("button");
-        resetbtn.setAttribute("value", "Reset");
-        var render = divmain.append(addbtn, divdisplay, startbtn, stopbtn, resetbtn);
-        return render;
+        // if (this.status == "started") {
+        //     this.value += this.delay;
+        // }
+        // if (this.display){
+        var _this = this;
+        this.display.append(creatediv('stopwatch'), createbtn('Start', function () { return _this.start(); }), createbtn('Stop', function () { return _this.stop(); }), createbtn('Reset', function () { return _this.reset(); }));
+        // }
     };
     return Stopwatch;
 }());
 var Stopoffset = /** @class */ (function (_super) {
     __extends(Stopoffset, _super);
-    function Stopoffset(id, delay) {
-        if (delay === void 0) { delay = 1000; }
-        var _this = _super.call(this, id, delay) || this;
-        _this.status = "stopped";
-        _this.delay = delay;
-        _this.display = document.getElementById(id);
-        _this.value = 0;
-        return _this;
+    function Stopoffset() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Stopoffset.prototype.formatTime = function (ms) {
         var hours = Math.floor(ms / 3600000);
@@ -114,76 +104,22 @@ var Stopoffset = /** @class */ (function (_super) {
         }
         return hours + ':' + minutes + ':' + seconds + '.' + ds;
     };
-    Stopoffset.prototype.update = function () {
-        if (this.status == "started") {
-            this.value += this.delay;
-        }
-        this.display.innerHTML = this.formatTime(this.value);
-    };
-    Stopoffset.prototype.start = function () {
-        if (this.status == "stopped") {
-            this.status = "started";
-            if (!this.interval) {
-                var t = this;
-                this.interval = setInterval(function () { t.update(); }, this.delay);
-            }
-        }
-    };
-    Stopoffset.prototype.stop = function () {
-        if (this.status == "started") {
-            this.status = "stopped";
-            if (this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-        }
-    };
-    Stopoffset.prototype.reset = function () {
-        this.stop();
-        this.value = 0;
-        this.update();
-    };
-    Stopoffset.prototype.add = function () {
-        return this.update();
-    };
-    Stopoffset.prototype.render = function () {
-        var divmain = document.createElement("div");
-        divmain.setAttribute("class", "stopwatch");
-        var addbtn = document.createElement("button");
-        addbtn.setAttribute("value", "Add");
-        var divdisplay = document.createElement("div");
-        divdisplay.setAttribute("id", "stopwatch");
-        var startbtn = document.createElement("button");
-        startbtn.setAttribute("value", "Start");
-        var stopbtn = document.createElement("button");
-        stopbtn.setAttribute("value", "Stop");
-        var resetbtn = document.createElement("button");
-        resetbtn.setAttribute("value", "Reset");
-        var render = divmain.append(addbtn, divdisplay, startbtn, stopbtn, resetbtn);
-        return render;
-    };
     return Stopoffset;
 }(Stopwatch));
 var Stopdecimal = /** @class */ (function (_super) {
     __extends(Stopdecimal, _super);
-    function Stopdecimal(id, delay) {
-        if (delay === void 0) { delay = 1000; }
-        var _this = _super.call(this, id, delay) || this;
-        _this.status = "stopped";
-        _this.delay = delay;
-        _this.display = document.getElementById(id);
-        _this.value = 0;
-        return _this;
+    function Stopdecimal() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Stopdecimal.prototype.formatTime = function (ms) {
         var hours = Math.floor(ms / 3600000);
-        var minutes = Math.floor((ms - (hours * 3600000)) / 60000) + 10;
-        var seconds = Math.floor((ms - (hours * 3600000) - ((minutes - 10) * 60000)) / 1000);
-        var ds = Math.floor((ms - (hours * 3600000) - ((minutes - 10) * 60000) - (seconds * 1000)) / 100);
+        var minutes = Math.floor((ms - (hours * 3600000)) / 60000);
+        var seconds = Math.floor((ms - (hours * 3600000) - (minutes * 60000)) / 1000);
+        var ds = Math.floor((ms - (hours * 3600000) - (minutes * 60000) - (seconds * 1000)) / 100);
         if (hours < 10) {
             hours = "0" + hours;
         }
-        if ((minutes - 10) < 10) {
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
         if (seconds < 10) {
@@ -192,61 +128,26 @@ var Stopdecimal = /** @class */ (function (_super) {
         if (ds < 100) {
             ds = "0" + ds;
         }
-        if (ds < 10) {
-            ds = "0" + ds;
-        }
         return hours + ':' + minutes + ':' + seconds + '.' + ds;
-    };
-    Stopdecimal.prototype.update = function () {
-        if (this.status == "started") {
-            this.value += this.delay;
-        }
-        this.display.innerHTML = this.formatTime(this.value);
-    };
-    Stopdecimal.prototype.start = function () {
-        if (this.status == "stopped") {
-            this.status = "started";
-            if (!this.interval) {
-                var t = this;
-                this.interval = setInterval(function () { t.update(); }, this.delay);
-            }
-        }
-    };
-    Stopdecimal.prototype.stop = function () {
-        if (this.status == "started") {
-            this.status = "stopped";
-            if (this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-        }
-    };
-    Stopdecimal.prototype.reset = function () {
-        this.stop();
-        this.value = 0;
-        this.update();
-    };
-    Stopdecimal.prototype.add = function () {
-        return this.update();
-    };
-    Stopdecimal.prototype.render = function () {
-        var divmain = document.createElement("div");
-        divmain.setAttribute("class", "stopwatch");
-        var addbtn = document.createElement("button");
-        addbtn.setAttribute("value", "Add");
-        var divdisplay = document.createElement("div");
-        divdisplay.setAttribute("id", "stopwatch");
-        var startbtn = document.createElement("button");
-        startbtn.setAttribute("value", "Start");
-        var stopbtn = document.createElement("button");
-        stopbtn.setAttribute("value", "Stop");
-        var resetbtn = document.createElement("button");
-        resetbtn.setAttribute("value", "Reset");
-        var render = divmain.append(addbtn, divdisplay, startbtn, stopbtn, resetbtn);
-        return render;
     };
     return Stopdecimal;
 }(Stopwatch));
-var stopwatch = new Stopwatch("stopwatch");
+function createbtn(name, listener) {
+    var btn = document.createElement('button');
+    btn.innerText = name;
+    btn.addEventListener('click', listener);
+    return btn;
+}
+function creatediv(id) {
+    var dv = document.createElement('div');
+    dv.setAttribute('id', id);
+    return dv;
+}
+(function () {
+    var btn = document.getElementsByClassName('add-btn');
+    btn[0].addEventListener('click', function () {
+        new Stopwatch(btn[0].getAttribute('data-idw'));
+    });
+})();
 // const stopwatch1= new Stopoffset("stopwatch");
 // const stopwatch2=new Stopdecimal("stopwatch");

@@ -1,18 +1,29 @@
+enum Status{
+    Started,
+    Stopped
+}
 
-class Stopwatch{
-    protected display: HTMLElement | null;
-    protected delay: number;
-    protected status: string;
-    protected value: number;
-    protected interval: any;
-    constructor(id:string,delay = 10) {
-        this.status = "stopped";
-        this.delay = delay;
+interface IStopWatch{
+    start:() =>void;
+    stop:() =>void;
+    reset:() =>void;
+
+}
+class Stopwatch implements IStopWatch{
+    private display: HTMLElement | null;
+    private delay: number;
+    private status: Status;
+    private value: number;
+    private interval: any;
+    constructor(id:string) {
+        this.render();
+        this.status = Status.Stopped;
+        this.delay = 100;
         this.display = document.getElementById(id);
         this.value = 0;
     }
 
-    protected formatTime(ms: number) {
+     formatTime(ms: number) {
         var hours: string | number= Math.floor(ms / 3600000);
         var minutes : string | number= Math.floor((ms - (hours * 3600000)) / 60000);
         var seconds : string | number= Math.floor((ms - (hours * 3600000) - (minutes * 60000)) / 1000);
@@ -26,16 +37,18 @@ class Stopwatch{
         return hours+':'+minutes+':'+seconds+'.'+ds;
       }
 
-    protected update() {
-        if (this.status == "started") {
+     update() {
+        if (this.status == Status.Started) {
             this.value += this.delay;
         }
-       this.display!.innerHTML= this.formatTime(this.value)
+        const d=document.getElementById('stopwatch');
+        d!.innerHTML=this.formatTime(this.value)
+       
     }
 
-    protected start() {
-        if (this.status == "stopped") {
-            this.status = "started";
+     start() {
+        if (this.status == Status.Stopped) {
+            this.status = Status.Started;
             if (!this.interval) {
                 var t = this;
                 this.interval = setInterval(function () { t.update(); }, this.delay);
@@ -43,9 +56,9 @@ class Stopwatch{
         }
     }
 
-    protected stop() {
-        if (this.status == "started") {
-            this.status = "stopped";
+     stop() {
+        if (this.status == Status.Started) {
+            this.status = Status.Stopped;
             if (this.interval) {
                 clearInterval(this.interval);
                 this.interval = null;
@@ -53,43 +66,25 @@ class Stopwatch{
         }
     }
 
-    protected reset() {
+     reset() {
         this.stop();
         this.value = 0;
         this.update();
     }
 
-    protected add(){
-        return this.update()
-    }
-
-  protected render(){
-
-        const divmain= document.createElement("div")
-        divmain.setAttribute("class","stopwatch");
-
-        const addbtn= document.createElement("button")
-        addbtn.setAttribute("value","Add");
-        
-        const divdisplay= document.createElement("div")
-        divdisplay.setAttribute("id","stopwatch");
-
-
-        const startbtn= document.createElement("button")
-       startbtn.setAttribute("value","Start");
-
+  private render(){
+    // if (this.status == "started") {
+    //     this.value += this.delay;
+    // }
+    // if (this.display){
        
-       const stopbtn= document.createElement("button")
-       stopbtn.setAttribute("value","Stop");
-
-
-       const resetbtn= document.createElement("button")
-       resetbtn.setAttribute("value","Reset");
-
-       const render=divmain.append(addbtn,divdisplay,startbtn,stopbtn,resetbtn)
-
-       return render
-       
+    this.display!.append( 
+        creatediv('stopwatch'),
+        createbtn('Start',() => this.start()),
+        createbtn('Stop',() => this.stop()),
+        createbtn('Reset',() => this.reset())
+    )
+    // }
     }
 }
 
@@ -98,189 +93,68 @@ class Stopwatch{
 
 class Stopoffset extends Stopwatch{
 
-    constructor(id:string,delay = 1000) {
-        super(id,delay);
-        this.status = "stopped";
-        this.delay = delay;
-        this.display = document.getElementById(id);
-        this.value = 0;
-    }
+formatTime(ms: number): string {
+    var hours: string | number= Math.floor(ms / 3600000);
+    var minutes : string | number= Math.floor((ms - (hours * 3600000)) / 60000)+10;
+    var seconds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000)) / 1000);
+    var ds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000) - (seconds * 1000))/100);
 
-    protected formatTime(ms: number) {
-        var hours: string | number= Math.floor(ms / 3600000);
-        var minutes : string | number= Math.floor((ms - (hours * 3600000)) / 60000)+10;
-        var seconds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000)) / 1000);
-        var ds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000) - (seconds * 1000))/100);
-
-        if (hours < 10) {hours = "0" + hours;}
-        if ((minutes-10) < 10) {minutes = "0" + minutes;}
-        if (seconds < 10) {seconds = "0" + seconds;}
-    
-
-        return hours+':'+minutes+':'+seconds+'.'+ds;
-      }
-
-    protected update() {
-        if (this.status == "started") {
-            this.value += this.delay;
-        }
-       this.display!.innerHTML= this.formatTime(this.value)
-    }
-
-    protected start() {
-        if (this.status == "stopped") {
-            this.status = "started";
-            if (!this.interval) {
-                var t = this;
-                this.interval = setInterval(function () { t.update(); }, this.delay);
-            }
-        }
-    }
-
-    protected stop() {
-        if (this.status == "started") {
-            this.status = "stopped";
-            if (this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-        }
-    }
-
-    protected reset() {
-        this.stop();
-        this.value = 0;
-        this.update();
-    }
-
-    protected add(){
-        return this.update()
-    }
-
-  protected render(){
-
-        const divmain= document.createElement("div")
-        divmain.setAttribute("class","stopwatch");
-
-        const addbtn= document.createElement("button")
-        addbtn.setAttribute("value","Add");
-        
-        const divdisplay= document.createElement("div")
-        divdisplay.setAttribute("id","stopwatch");
+    if (hours < 10) {hours = "0" + hours;}
+    if ((minutes-10) < 10) {minutes = "0" + minutes;}
+    if (seconds < 10) {seconds = "0" + seconds;}
 
 
-        const startbtn= document.createElement("button")
-       startbtn.setAttribute("value","Start");
+    return hours+':'+minutes+':'+seconds+'.'+ds;
+}
 
-       
-       const stopbtn= document.createElement("button")
-       stopbtn.setAttribute("value","Stop");
-
-
-       const resetbtn= document.createElement("button")
-       resetbtn.setAttribute("value","Reset");
-
-       const render=divmain.append(addbtn,divdisplay,startbtn,stopbtn,resetbtn)
-
-       return render
-       
-    }
 }
 
 
 class Stopdecimal extends Stopwatch{
-
-    constructor(id:string,delay = 1000) {
-        super(id,delay);
-        this.status = "stopped";
-        this.delay = delay;
-        this.display = document.getElementById(id);
-        this.value = 0;
-    }
-
-    protected formatTime(ms: number) {
+    formatTime(ms: number) {
         var hours: string | number= Math.floor(ms / 3600000);
-        var minutes : string | number= Math.floor((ms - (hours * 3600000)) / 60000)+10;
-        var seconds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000)) / 1000);
-        var ds : string | number= Math.floor((ms - (hours * 3600000) - ((minutes-10) * 60000) - (seconds * 1000))/100);
+        var minutes : string | number= Math.floor((ms - (hours * 3600000)) / 60000);
+        var seconds : string | number= Math.floor((ms - (hours * 3600000) - (minutes * 60000)) / 1000);
+        var ds : string | number= Math.floor((ms - (hours * 3600000) - (minutes * 60000) - (seconds * 1000))/100);
 
         if (hours < 10) {hours = "0" + hours;}
-        if ((minutes-10) < 10) {minutes = "0" + minutes;}
+        if (minutes < 10) {minutes = "0" + minutes;}
         if (seconds < 10) {seconds = "0" + seconds;}
-               if (ds < 100) {ds = "0" + ds;}
-               if (ds < 10) {ds = "0" + ds;}
-    
+        if (ds <100) {ds= "0" + ds;}
+ 
 
         return hours+':'+minutes+':'+seconds+'.'+ds;
       }
-
-    protected update() {
-        if (this.status == "started") {
-            this.value += this.delay;
-        }
-       this.display!.innerHTML= this.formatTime(this.value)
-    }
-
-    protected start() {
-        if (this.status == "stopped") {
-            this.status = "started";
-            if (!this.interval) {
-                var t = this;
-                this.interval = setInterval(function () { t.update(); }, this.delay);
-            }
-        }
-    }
-
-    protected stop() {
-        if (this.status == "started") {
-            this.status = "stopped";
-            if (this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-        }
-    }
-
-    protected reset() {
-        this.stop();
-        this.value = 0;
-        this.update();
-    }
-
-    protected add(){
-        return this.update()
-    }
-
-  protected render(){
-
-        const divmain= document.createElement("div")
-        divmain.setAttribute("class","stopwatch");
-
-        const addbtn= document.createElement("button")
-        addbtn.setAttribute("value","Add");
-        
-        const divdisplay= document.createElement("div")
-        divdisplay.setAttribute("id","stopwatch");
-
-
-        const startbtn= document.createElement("button")
-       startbtn.setAttribute("value","Start");
-
-       
-       const stopbtn= document.createElement("button")
-       stopbtn.setAttribute("value","Stop");
-
-
-       const resetbtn= document.createElement("button")
-       resetbtn.setAttribute("value","Reset");
-
-       const render=divmain.append(addbtn,divdisplay,startbtn,stopbtn,resetbtn)
-
-       return render
-       
-    }
+   
 }
 
-const stopwatch= new Stopwatch("stopwatch");
+
+
+function createbtn(name: string,listener: () => void){
+
+    const btn= document.createElement('button')
+    btn.innerText=name;
+    btn.addEventListener('click',listener)
+
+    return btn;
+
+}
+
+function creatediv(id:string){
+
+    const dv= document.createElement('div')
+    dv.setAttribute('id',id)
+    return dv;
+
+}
+
+(function(){
+    const btn=document.getElementsByClassName('add-btn');
+    btn[0].addEventListener('click', () => {
+        new Stopwatch(btn[0].getAttribute('data-idw') as string)
+    })
+})();
+
+
 // const stopwatch1= new Stopoffset("stopwatch");
 // const stopwatch2=new Stopdecimal("stopwatch");
